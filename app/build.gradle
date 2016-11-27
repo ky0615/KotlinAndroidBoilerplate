@@ -9,7 +9,7 @@ def packageName = "moe.linux.boilerplate"
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.1"
 
     defaultConfig {
         applicationId packageName
@@ -22,7 +22,7 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         manifestPlaceholders = [
-                fabric_api_key: fabric_api_key
+                fabric_api_key: 0
         ]
 
         buildConfigField "String", "BASE_PACKAGE_ID", String.format("\"%s\"", packageName);
@@ -159,18 +159,31 @@ dependencies {
     }
 }
 
-def Properties props = new Properties()
+def Properties signProps = new Properties()
 def signFile = new File("signing.properties")
 if (signFile.canRead()) {
-    props.load(new FileInputStream(signFile))
+    signProps.load(new FileInputStream(signFile))
 
-    if (props != null) {
-        android.signingConfigs.release.storeFile = file(props['STORE_FILE'])
-        android.signingConfigs.release.storePassword = props['STORE_PASSWORD']
-        android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
-        android.signingConfigs.release.keyPassword = props['KEY_PASSWORD']
+    if (signProps != null) {
+        android.signingConfigs.release.storeFile = file(signProps['STORE_FILE'])
+        android.signingConfigs.release.storePassword = signProps['STORE_PASSWORD']
+        android.signingConfigs.release.keyAlias = signProps['KEY_ALIAS']
+        android.signingConfigs.release.keyPassword = signProps['KEY_PASSWORD']
     }
 } else {
     println "signing.properties is not found"
     android.buildTypes.release.signingConfig = null
+}
+
+
+def Properties fabricProps = new Properties()
+def fabricFile = new File("app/fabric.properties")
+if (fabricFile.canRead()) {
+    fabricProps.load(new FileInputStream(fabricFile))
+
+    if (fabricProps != null) {
+        android.defaultConfig.manifestPlaceholders["fabric_api_key"] = fabricProps['apiKey']
+    }
+} else {
+    println "fabric.properties is not found"
 }
