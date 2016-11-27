@@ -1,0 +1,176 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+apply plugin: 'io.fabric'
+apply plugin: 'com.github.ben-manes.versions'
+apply plugin: 'com.vanniktech.android.apk.size'
+
+def packageName = "moe.linux.boilerplate"
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
+
+    defaultConfig {
+        applicationId packageName
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+
+        manifestPlaceholders = [
+                fabric_api_key: fabric_api_key
+        ]
+
+        buildConfigField "String", "BASE_PACKAGE_ID", String.format("\"%s\"", packageName);
+    }
+
+    signingConfigs {
+        release
+    }
+
+    packagingOptions {
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            debuggable true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+
+        release {
+            minifyEnabled true
+            debuggable false
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    productFlavors {
+        local {
+            applicationId packageName + ".local"
+            buildConfigField "String", "API_BASE", "\"https://hogehoge.com\""
+
+            manifestPlaceholders = [
+                    facebookKey: 0
+            ]
+        }
+
+        production {
+            applicationId packageName
+            buildConfigField "String", "API_BASE", "\"https://hogehoge.com\""
+
+            manifestPlaceholders = [
+                    facebookKey: 0
+            ]
+        }
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDir 'src/androidTest/kotlin'
+
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+}
+
+// Dagger系のライブラリを使うのに必要
+kapt {
+    generateStubs = true
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Kotlin
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    // Google Support Library
+    compile "com.android.support:appcompat-v7:${support_lib_version}"
+
+    // Dagger
+    compile 'com.google.dagger:dagger:2.8'
+    kapt 'com.google.dagger:dagger-compiler:2.8'
+
+    // Retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+
+    // RxJava
+    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
+    // okhttp
+    compile 'com.squareup.okhttp3:okhttp:3.4.2'
+
+    // picasso
+    compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
+    // Paperparcel
+    compile 'com.github.grandstaish.paperparcel:paperparcel:1.0.1'
+    compile 'com.github.grandstaish.paperparcel:paperparcel-kotlin:1.0.1'
+    kapt 'com.github.grandstaish.paperparcel:compiler:1.0.1'
+
+    // Misc
+    compile 'com.jakewharton.timber:timber:4.3.1'
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'com.github.gfx.android.robolectricinstrumentation:robolectric-instrumentation:3.1.4'
+    testCompile('com.squareup.assertj:assertj-android:1.1.1') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    testCompile 'org.mockito:mockito-all:1.10.19'
+    androidTestCompile('com.android.support.test:runner:0.4.1') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestCompile('com.android.support.test:rules:0.4.1') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestCompile('com.squareup.assertj:assertj-android:1.1.1') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.1') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestCompile('com.android.support.test.espresso:espresso-intents:2.2.1') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+}
+
+def Properties props = new Properties()
+def signFile = new File("signing.properties")
+if (signFile.canRead()) {
+    props.load(new FileInputStream(signFile))
+
+    if (props != null) {
+        android.signingConfigs.release.storeFile = file(props['STORE_FILE'])
+        android.signingConfigs.release.storePassword = props['STORE_PASSWORD']
+        android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
+        android.signingConfigs.release.keyPassword = props['KEY_PASSWORD']
+    }
+} else {
+    println "signing.properties is not found"
+    android.buildTypes.release.signingConfig = null
+}
