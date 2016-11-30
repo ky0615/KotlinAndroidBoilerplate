@@ -7,9 +7,8 @@ import android.view.LayoutInflater
 import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides
+import io.reactivex.disposables.CompositeDisposable
 import moe.linux.boilerplate.di.scope.AppQualifier
-import okhttp3.OkHttpClient
-import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
 import javax.inject.Singleton
 
@@ -33,22 +32,7 @@ class AppModule(private val context: Application) {
     fun provideDebugTree(): Timber.DebugTree = Timber.DebugTree()
 
     @Provides
-    fun provideOkHttpClient(): OkHttpClient {
-        val builder = OkHttpClient.Builder()
-
-        builder.addInterceptor {
-            val original = it.request()
-            Timber.d("intercept: url: ${original.url()}")
-
-            it.proceed(original)
-        }
-
-        return builder.build()
-    }
-
-    @Provides
-    fun provideCompositeSubscription(): CompositeSubscription = CompositeSubscription()
-
+    fun provideCompositeDisposable(): CompositeDisposable = CompositeDisposable()
 
     @Provides @Singleton
     fun providePicasso(context: Context): Picasso {

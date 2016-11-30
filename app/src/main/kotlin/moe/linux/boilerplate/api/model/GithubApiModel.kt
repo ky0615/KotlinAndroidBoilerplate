@@ -10,6 +10,8 @@ data class CommitsResponse(
 
         val sha: String,
 
+        val commit: Commit,
+
         val url: String,
 
         val author: User,
@@ -45,7 +47,7 @@ data class CommitUser(
 
         val email: String,
 
-        val data: Date
+        val date: Date
 ) : PaperParcelable {
     companion object {
         @JvmField val CREATOR = PaperParcelable.Creator(CommitUser::class.java)
