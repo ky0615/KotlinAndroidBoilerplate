@@ -6,11 +6,11 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = arrayOf(
-        AppModule::class
+        AppModule::class,
+        ApiModule::class
 ))
 interface AppComponent {
     fun injectTo(app: MainApplication)
 
     fun plus(module: ActivityModule): ActivityComponent
 }
-
