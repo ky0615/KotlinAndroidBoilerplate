@@ -1,7 +1,6 @@
-package moe.linux.boilerplate.api
+package moe.linux.boilerplate.api.github
 
 import io.reactivex.Single
-import moe.linux.boilerplate.api.model.CommitsResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 

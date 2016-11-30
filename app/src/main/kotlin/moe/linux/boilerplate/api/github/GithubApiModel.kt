@@ -1,4 +1,4 @@
-package moe.linux.boilerplate.api.model
+package moe.linux.boilerplate.api.github
 
 import com.google.gson.annotations.SerializedName
 import nz.bradcampbell.paperparcel.PaperParcel

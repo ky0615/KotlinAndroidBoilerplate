@@ -3,7 +3,8 @@ package moe.linux.boilerplate.di
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import dagger.Module
 import dagger.Provides
-import moe.linux.boilerplate.api.GithubApiService
+import moe.linux.boilerplate.api.github.GithubApiService
+import moe.linux.boilerplate.api.qiita.QiitaApiService
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -13,34 +14,38 @@ import javax.inject.Singleton
 @Module
 class ApiModule {
     @Provides @Singleton
-    fun provideGithubApiService(builder: Retrofit.Builder): GithubApiService {
-        val retrofit = builder.baseUrl("https://api.github.com").build()
-
-        return retrofit.create(GithubApiService::class.java)
-    }
-
-    @Provides @Singleton
-    fun provideRetrofitBuilder(okHttpClient: OkHttpClient,
-                               rxJavaCallAdapterFactory: RxJava2CallAdapterFactory,
-                               gsonConverterFactory: GsonConverterFactory): Retrofit.Builder =
+    fun provideGithubApiService(rxJavaCallAdapterFactory: RxJava2CallAdapterFactory,
+                                gsonConverterFactory: GsonConverterFactory): GithubApiService =
             Retrofit.Builder()
-                    .client(okHttpClient)
+                    .client(OkHttpClient.Builder()
+                            .addInterceptor {
+                                val original = it.request()
+                                Timber.d("github intercept: url: ${original.url()}")
+
+                                it.proceed(original)
+                            }.build())
                     .addCallAdapterFactory(rxJavaCallAdapterFactory)
                     .addConverterFactory(gsonConverterFactory)
+                    .baseUrl("https://api.github.com/")
+                    .build()
+                    .create(GithubApiService::class.java)
 
     @Provides @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
-        val builder = OkHttpClient.Builder()
+    fun provideQiitaApiService(rxJavaCallAdapterFactory: RxJava2CallAdapterFactory,
+                               gsonConverterFactory: GsonConverterFactory): QiitaApiService =
+            Retrofit.Builder()
+                    .client(OkHttpClient.Builder()
+                            .addInterceptor {
+                                val original = it.request()
+                                Timber.d("qiita intercept: url: ${original.url()}")
 
-        builder.addInterceptor {
-            val original = it.request()
-            Timber.d("intercept: url: ${original.url()}")
-
-            it.proceed(original)
-        }
-
-        return builder.build()
-    }
+                                it.proceed(original)
+                            }.build())
+                    .addCallAdapterFactory(rxJavaCallAdapterFactory)
+                    .addConverterFactory(gsonConverterFactory)
+                    .baseUrl("https://qiita.com/api/v2/")
+                    .build()
+                    .create(QiitaApiService::class.java)
 
     @Provides @Singleton
     fun provideGsonConverterFactory(): GsonConverterFactory = GsonConverterFactory.create()
