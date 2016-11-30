@@ -33,7 +33,7 @@ class AppModule(private val context: Application) {
     fun provideDebugTree(): Timber.DebugTree = Timber.DebugTree()
 
     @Provides
-    fun provideOkHttpCLient(): OkHttpClient {
+    fun provideOkHttpClient(): OkHttpClient {
         val builder = OkHttpClient.Builder()
 
         builder.addInterceptor {
