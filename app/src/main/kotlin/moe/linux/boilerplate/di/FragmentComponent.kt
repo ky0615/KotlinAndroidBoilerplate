@@ -2,6 +2,7 @@ package moe.linux.boilerplate.di
 
 import dagger.Subcomponent
 import moe.linux.boilerplate.di.scope.FragmentScope
+import moe.linux.boilerplate.fragment.MainFragment
 import moe.linux.boilerplate.fragment.SampleFragment
 
 @FragmentScope
@@ -10,4 +11,5 @@ import moe.linux.boilerplate.fragment.SampleFragment
 ))
 interface FragmentComponent {
     fun injectTo(fragment: SampleFragment)
+    fun injectTo(fragment: MainFragment)
 }
