@@ -1,4 +1,4 @@
-package moe.linux.boilerplate.activity
+package moe.linux.boilerplate.view.activity
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -13,9 +13,9 @@ import moe.linux.boilerplate.R
 import moe.linux.boilerplate.api.github.GithubApiClient
 import moe.linux.boilerplate.api.qiita.QiitaApiClient
 import moe.linux.boilerplate.databinding.ActivityMainBinding
-import moe.linux.boilerplate.fragment.FrontFragment
-import moe.linux.boilerplate.fragment.GithubListFragment
-import moe.linux.boilerplate.fragment.QiitaListFragment
+import moe.linux.boilerplate.view.fragment.FrontFragment
+import moe.linux.boilerplate.view.fragment.GithubListFragment
+import moe.linux.boilerplate.view.fragment.QiitaListFragment
 import timber.log.Timber
 import javax.inject.Inject
 

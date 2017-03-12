@@ -1,4 +1,4 @@
-package moe.linux.boilerplate.activity
+package moe.linux.boilerplate.view.activity
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity

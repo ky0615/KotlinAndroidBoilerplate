@@ -1,8 +1,8 @@
-package moe.linux.boilerplate.fragment
+package moe.linux.boilerplate.view.fragment
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import moe.linux.boilerplate.activity.BaseActivity
+import moe.linux.boilerplate.view.activity.BaseActivity
 import moe.linux.boilerplate.di.FragmentComponent
 import moe.linux.boilerplate.di.FragmentModule
 

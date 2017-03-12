@@ -1,4 +1,4 @@
-package moe.linux.boilerplate.fragment
+package moe.linux.boilerplate.view.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
