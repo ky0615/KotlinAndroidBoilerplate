@@ -6,9 +6,10 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import moe.linux.boilerplate.adapter.QiitaListAdapter
 import moe.linux.boilerplate.api.qiita.QiitaApiClient
 import moe.linux.boilerplate.databinding.FragmentQiitaListBinding
+import moe.linux.boilerplate.viewModel.QiitaListAdapter
+import moe.linux.boilerplate.viewModel.QiitaListViewModel
 import javax.inject.Inject
 
 class QiitaListFragment : BaseFragment() {
@@ -23,8 +24,10 @@ class QiitaListFragment : BaseFragment() {
     @Inject
     lateinit var qiitaClient: QiitaApiClient
 
+    @Inject
+    lateinit var qiitaListViewModel: QiitaListViewModel
+
     lateinit private var binding: FragmentQiitaListBinding
-    private val qiitaListAdapter: QiitaListAdapter = QiitaListAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,27 +35,18 @@ class QiitaListFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentQiitaListBinding.inflate(inflater, container, false)
-        binding.list.layoutManager = LinearLayoutManager(context)
-        binding.list.adapter = qiitaListAdapter
+        binding = FragmentQiitaListBinding.inflate(inflater, container, false).apply {
+            list.layoutManager = LinearLayoutManager(context)
+            list.adapter = QiitaListAdapter(context, qiitaListViewModel.list)
+        }
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
-        getData()
-    }
-
-    private fun getData() {
-        qiitaClient.stockList("dll7")
-            .subscribe({
-                qiitaListAdapter.apply {
-                    list.clear()
-                    list.addAll(it)
-                    notifyDataSetChanged()
-                }
-            }, {
-                Snackbar.make(binding.coordinatorLayout, "エラーが発生しました。", Snackbar.LENGTH_LONG).show()
-            })
+        qiitaListViewModel.start {
+            it.printStackTrace()
+            Snackbar.make(binding.coordinatorLayout, "cause error: ${it.message}", Snackbar.LENGTH_LONG).show()
+        }
     }
 }

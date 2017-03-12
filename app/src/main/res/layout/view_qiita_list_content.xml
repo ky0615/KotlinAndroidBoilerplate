@@ -7,18 +7,20 @@
     <data>
 
         <variable
-            name="content"
-            type="moe.linux.boilerplate.api.qiita.StockListResponse" />
+            name="viewModel"
+            type="moe.linux.boilerplate.viewModel.QiitaStockViewModel" />
     </data>
 
     <android.support.v7.widget.CardView
+        android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/indent_1_5"
         android:layout_marginLeft="@dimen/indent_3"
         android:layout_marginRight="@dimen/indent_3"
         android:layout_marginTop="@dimen/indent_1_5"
-        app:cardElevation="@dimen/indent_1">
+        app:cardElevation="@dimen/indent_1"
+        app:onClickListener="@{()->viewModel.onClick()}">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,15 +32,16 @@
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{content.title}"
+                android:text="@{viewModel.stock.title}"
                 android:textSize="@dimen/text_size_4"
                 tools:text="This is a title" />
 
             <TextView
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:text="@{content.tagListText}"
+                android:text="@{viewModel.stock.tagListText}"
                 tools:text="tag a, b, c d" />
 
         </LinearLayout>

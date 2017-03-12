@@ -8,6 +8,7 @@ import moe.linux.boilerplate.di.FragmentModule
 
 abstract class BaseFragment : Fragment() {
     abstract val TAG: String
+
     val fragmentComponent: FragmentComponent by lazy {
         getBaseActivity().activityComponent.plus(FragmentModule(this))
     }
