@@ -6,4 +6,46 @@
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="indent_0">0dp</dimen>
+    <dimen name="indent_0_25">1dp</dimen>
+    <dimen name="indent_0_75">3dp</dimen>
+    <dimen name="indent_1">4dp</dimen>
+    <dimen name="indent_1_5">6dp</dimen>
+    <dimen name="indent_2">8dp</dimen>
+    <dimen name="indent_3">12dp</dimen>
+    <dimen name="indent_3_5">14dp</dimen>
+    <dimen name="indent_4">16dp</dimen>
+    <dimen name="indent_5">20dp</dimen>
+    <dimen name="indent_6">24dp</dimen>
+    <dimen name="indent_7">28dp</dimen>
+    <dimen name="indent_8">32dp</dimen>
+    <dimen name="indent_9">36dp</dimen>
+    <dimen name="indent_10">40dp</dimen>
+
+    <dimen name="m_indent_0_75">-3dp</dimen>
+    <dimen name="m_indent_1">-4dp</dimen>
+    <dimen name="m_indent_1_5">-6dp</dimen>
+    <dimen name="m_indent_2">-8dp</dimen>
+    <dimen name="m_indent_3">-12dp</dimen>
+    <dimen name="m_indent_4">-16dp</dimen>
+    <dimen name="m_indent_5">-20dp</dimen>
+    <dimen name="m_indent_6">-24dp</dimen>
+    <dimen name="m_indent_7">-28dp</dimen>
+    <dimen name="m_indent_8">-32dp</dimen>
+    <dimen name="m_indent_9">-36dp</dimen>
+    <dimen name="m_indent_10">-40dp</dimen>
+
+    <dimen name="text_size_0">0sp</dimen>
+    <dimen name="text_size_1">4sp</dimen>
+    <dimen name="text_size_2">8sp</dimen>
+    <dimen name="text_size_3">12sp</dimen>
+    <dimen name="text_size_3_5">14sp</dimen>
+    <dimen name="text_size_4">16sp</dimen>
+    <dimen name="text_size_5">20sp</dimen>
+    <dimen name="text_size_6">24sp</dimen>
+    <dimen name="text_size_7">28sp</dimen>
+    <dimen name="text_size_8">32sp</dimen>
+    <dimen name="text_size_9">36sp</dimen>
+    <dimen name="text_size_10">40sp</dimen>
 </resources>

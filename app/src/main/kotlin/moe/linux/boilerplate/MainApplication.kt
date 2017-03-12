@@ -13,23 +13,17 @@ class MainApplication : Application() {
     @Inject
     lateinit var debugTree: Lazy<Timber.DebugTree>
 
-    companion object {
-        lateinit var component: AppComponent
+    val component: AppComponent by lazy {
+        DaggerAppComponent.builder()
+            .appModule(AppModule(this))
+            .build()
     }
 
     override fun onCreate() {
         super.onCreate()
-
-        initDependency()
+        component.injectTo(this)
 
         if (BuildConfig.DEBUG)
             Timber.plant(debugTree.get())
-    }
-
-    private fun initDependency() {
-        component = DaggerAppComponent.builder()
-                .appModule(AppModule(this))
-                .build()
-        component.injectTo(this)
     }
 }

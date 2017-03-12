@@ -3,17 +3,19 @@ package moe.linux.boilerplate.activity
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.annotation.StringRes
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
 import io.reactivex.Observable
-import io.reactivex.Observer
 import moe.linux.boilerplate.R
 import moe.linux.boilerplate.api.github.GithubApiClient
 import moe.linux.boilerplate.api.qiita.QiitaApiClient
 import moe.linux.boilerplate.databinding.ActivityMainBinding
-import moe.linux.boilerplate.di.ActivityModule
-import moe.linux.boilerplate.di.AppComponent
+import moe.linux.boilerplate.fragment.FrontFragment
+import moe.linux.boilerplate.fragment.GithubListFragment
+import moe.linux.boilerplate.fragment.QiitaListFragment
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -29,30 +31,24 @@ class MainActivity : BaseActivity() {
 
     lateinit var onStateChange: Observable<MenuItem>
 
+    lateinit var frontFragment: FrontFragment
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        setSupportActionBar(binding.toolbar)
+        activityComponent.injectTo(this)
 
-        val toggle = ActionBarDrawerToggle(this, binding.drawer, binding.toolbar,
-            R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        initView()
+        initFragment(savedInstanceState)
 
-        binding.drawer.addDrawerListener(toggle)
-        toggle.syncState()
-
-        onStateChange = Observable.create<MenuItem> { subscribe ->
-            binding.navView.setNavigationItemSelectedListener {
-                subscribe.onNext(it)
-                binding.drawer.closeDrawer(GravityCompat.START)
-                true
+        onStateChange.subscribe({
+            when (Page.parseWithId(it.itemId)) {
+                MainActivity.Page.FRONT -> frontFragment
+                MainActivity.Page.Github -> GithubListFragment.newInstance()
+                MainActivity.Page.Qiita -> QiitaListFragment.newInstance()
+            }.apply {
+                switchFragment(this, this.TAG)
             }
-        }.publish().refCount().apply {
-
-        }
-
-
-        onStateChange.subscribe()
-        onStateChange.subscribe()
+        })
 
 
         compositeDisposable.add(
@@ -83,25 +79,75 @@ class MainActivity : BaseActivity() {
         )
     }
 
-    fun setPage(page: Page) {
+    private fun initView() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        setSupportActionBar(binding.toolbar)
 
+        val toggle = ActionBarDrawerToggle(this, binding.drawer, binding.toolbar,
+            R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+
+        binding.drawer.addDrawerListener(toggle)
+        toggle.syncState()
+
+        onStateChange = Observable.create<MenuItem> { subscribe ->
+            binding.navView.setNavigationItemSelectedListener {
+                subscribe.onNext(it)
+                binding.drawer.closeDrawer(GravityCompat.START)
+                true
+            }
+        }
+            .publish()
+            .refCount()
     }
 
-    override fun injectDependencies(component: AppComponent) {
-        component.plus(ActivityModule(this))
-            .injectTo(this)
+    private fun initFragment(savedInstanceState: Bundle?) {
+        frontFragment = supportFragmentManager.findFragmentByTag(FrontFragment.TAG) as FrontFragment? ?: FrontFragment.newInstance()
+
+        if (savedInstanceState == null)
+            switchFragment(frontFragment, FrontFragment.TAG)
     }
 
     override fun onBackPressed() {
         if (binding.drawer.isDrawerOpen(GravityCompat.START))
             binding.drawer.closeDrawer(GravityCompat.START)
+        else if (switchFragment(frontFragment, FrontFragment.TAG))
+            Timber.d("back to front page")
         else
             super.onBackPressed()
     }
 
-    enum class Page(@StringRes val title: Int) {
-        Github(R.string.menu_github),
-        Qiita(R.string.menu_qiita),
+    fun switchFragment(fragment: Fragment, tag: String): Boolean {
+        if (fragment.isAdded) return false
+
+        val manager = supportFragmentManager
+
+        manager.beginTransaction().also { ft ->
+            val currentFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.contentFrame)
+            if (currentFragment != null)
+                ft.detach(currentFragment)
+            if (fragment.isDetached)
+                ft.attach(fragment)
+            else
+                ft.add(R.id.contentFrame, fragment, tag)
+        }
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            .commit()
+
+        manager.executePendingTransactions()
+
+        return true
+    }
+
+    enum class Page(@StringRes val id: Int) {
+        FRONT(0), // other page
+        Github(R.id.navGithub),
+        Qiita(R.id.navQiita),
         ;
+
+        companion object {
+            fun parseWithId(id: Int): Page {
+                return values().find { it.id == id } ?: FRONT
+            }
+        }
     }
 }

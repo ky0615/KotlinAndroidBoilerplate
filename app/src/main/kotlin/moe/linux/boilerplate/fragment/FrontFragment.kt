@@ -2,12 +2,14 @@ package moe.linux.boilerplate.fragment
 
 import android.os.Bundle
 
-class MainFragment() : BaseFragment() {
-    override val TAG: String = MainFragment::class.simpleName ?: "UndefinedClass"
+class FrontFragment : BaseFragment() {
+    override val TAG: String = FrontFragment.TAG
 
     companion object {
-        fun newInstance(): MainFragment {
-            return MainFragment()
+        val TAG: String = FrontFragment::class.simpleName ?: "UndefinedClass"
+
+        fun newInstance(): FrontFragment {
+            return FrontFragment()
         }
     }
 

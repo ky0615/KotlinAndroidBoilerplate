@@ -1,12 +1,20 @@
 package moe.linux.boilerplate.fragment
 
+import android.os.Bundle
 import android.support.v4.app.Fragment
 import moe.linux.boilerplate.activity.BaseActivity
-import moe.linux.boilerplate.di.ActivityComponent
+import moe.linux.boilerplate.di.FragmentComponent
+import moe.linux.boilerplate.di.FragmentModule
 
 abstract class BaseFragment : Fragment() {
+    abstract val TAG: String
+    val fragmentComponent: FragmentComponent by lazy {
+        getBaseActivity().activityComponent.plus(FragmentModule(this))
+    }
 
-    abstract fun injectDependencies(component: ActivityComponent)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     fun getBaseActivity(): BaseActivity = activity as BaseActivity
 }

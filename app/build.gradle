@@ -9,7 +9,7 @@ def packageName = "moe.linux.boilerplate"
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId packageName
@@ -100,6 +100,7 @@ dependencies {
 
     // Kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     // Google Support Library
     compile "com.android.support:appcompat-v7:${support_lib_version}"
@@ -123,7 +124,6 @@ dependencies {
     // RxJava
     compile 'io.reactivex.rxjava2:rxjava:2.0.0'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.0'
-    compile 'com.github.ReactiveX:RxKotlin:657274bb04'
 
     // okhttp
     compile 'com.squareup.okhttp3:okhttp:3.4.2'
@@ -190,4 +190,6 @@ if (fabricFile.canRead()) {
     }
 } else {
     println "fabric.properties is not found"
+}
+buildscript {
 }
