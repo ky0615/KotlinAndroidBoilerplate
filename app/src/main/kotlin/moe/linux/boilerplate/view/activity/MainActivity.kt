@@ -49,34 +49,6 @@ class MainActivity : BaseActivity() {
                 switchFragment(this, this.TAG)
             }
         })
-
-
-        compositeDisposable.add(
-            client.showCommitsList("ky0615", "KotlinAndroidBoilerplate")
-                .subscribe { list, throwable ->
-                    if (throwable != null) {
-                        Timber.e(throwable)
-                        return@subscribe
-                    }
-                    list.forEach {
-                        Timber.d("commit message: ${it.commit.message}")
-                    }
-                }
-        )
-
-        compositeDisposable.add(
-            qiitaClient.stockList("dll7")
-                .subscribe { list, throwable ->
-                    if (throwable != null) {
-                        Timber.e(throwable)
-                        return@subscribe
-                    }
-
-                    list.forEach {
-                        Timber.d("Stock title: ${it.title}")
-                    }
-                }
-        )
     }
 
     private fun initView() {
