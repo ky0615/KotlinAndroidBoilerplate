@@ -6,6 +6,6 @@ import io.reactivex.schedulers.Schedulers
 
 abstract class AbstructApiClient {
     protected fun <T : Any?> bindThread(single: Single<T>): Single<T> =
-            single.subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+        single.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
 }

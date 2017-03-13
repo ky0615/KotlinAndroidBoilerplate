@@ -6,8 +6,8 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = arrayOf(
-        AppModule::class,
-        ApiModule::class
+    AppModule::class,
+    ApiModule::class
 ))
 interface AppComponent {
     fun injectTo(app: MainApplication)

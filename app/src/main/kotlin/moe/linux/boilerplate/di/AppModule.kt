@@ -26,7 +26,7 @@ class AppModule(private val context: Application) {
 
     @Provides @Singleton
     fun provideLayoutInflater(@AppQualifier context: Context): LayoutInflater
-            = LayoutInflater.from(context)
+        = LayoutInflater.from(context)
 
     @Provides
     fun provideDebugTree(): Timber.DebugTree = Timber.DebugTree()

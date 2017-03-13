@@ -16,36 +16,36 @@ class ApiModule {
     @Provides @Singleton
     fun provideGithubApiService(rxJavaCallAdapterFactory: RxJava2CallAdapterFactory,
                                 gsonConverterFactory: GsonConverterFactory): GithubApiService =
-            Retrofit.Builder()
-                    .client(OkHttpClient.Builder()
-                            .addInterceptor {
-                                val original = it.request()
-                                Timber.d("github intercept: url: ${original.url()}")
+        Retrofit.Builder()
+            .client(OkHttpClient.Builder()
+                .addInterceptor {
+                    val original = it.request()
+                    Timber.d("github intercept: url: ${original.url()}")
 
-                                it.proceed(original)
-                            }.build())
-                    .addCallAdapterFactory(rxJavaCallAdapterFactory)
-                    .addConverterFactory(gsonConverterFactory)
-                    .baseUrl("https://api.github.com/")
-                    .build()
-                    .create(GithubApiService::class.java)
+                    it.proceed(original)
+                }.build())
+            .addCallAdapterFactory(rxJavaCallAdapterFactory)
+            .addConverterFactory(gsonConverterFactory)
+            .baseUrl("https://api.github.com/")
+            .build()
+            .create(GithubApiService::class.java)
 
     @Provides @Singleton
     fun provideQiitaApiService(rxJavaCallAdapterFactory: RxJava2CallAdapterFactory,
                                gsonConverterFactory: GsonConverterFactory): QiitaApiService =
-            Retrofit.Builder()
-                    .client(OkHttpClient.Builder()
-                            .addInterceptor {
-                                val original = it.request()
-                                Timber.d("qiita intercept: url: ${original.url()}")
+        Retrofit.Builder()
+            .client(OkHttpClient.Builder()
+                .addInterceptor {
+                    val original = it.request()
+                    Timber.d("qiita intercept: url: ${original.url()}")
 
-                                it.proceed(original)
-                            }.build())
-                    .addCallAdapterFactory(rxJavaCallAdapterFactory)
-                    .addConverterFactory(gsonConverterFactory)
-                    .baseUrl("https://qiita.com/api/v2/")
-                    .build()
-                    .create(QiitaApiService::class.java)
+                    it.proceed(original)
+                }.build())
+            .addCallAdapterFactory(rxJavaCallAdapterFactory)
+            .addConverterFactory(gsonConverterFactory)
+            .baseUrl("https://qiita.com/api/v2/")
+            .build()
+            .create(QiitaApiService::class.java)
 
     @Provides @Singleton
     fun provideGsonConverterFactory(): GsonConverterFactory = GsonConverterFactory.create()

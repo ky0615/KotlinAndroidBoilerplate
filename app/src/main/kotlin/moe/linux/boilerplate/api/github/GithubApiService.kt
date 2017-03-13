@@ -8,7 +8,7 @@ interface GithubApiService {
 
     @GET("/repos/{author}/{repo}/commits")
     fun showCommitsList(
-            @Path("author") author: String,
-            @Path("repo") repo: String
+        @Path("author") author: String,
+        @Path("repo") repo: String
     ): Single<List<CommitsResponse>>
 }

@@ -8,6 +8,6 @@ interface QiitaApiService {
 
     @GET("users/{user}/stocks")
     fun stockList(
-            @Path("user") user: String
+        @Path("user") user: String
     ): Single<List<StockListResponse>>
 }
