@@ -9,6 +9,7 @@
 
     <dimen name="indent_0">0dp</dimen>
     <dimen name="indent_0_25">1dp</dimen>
+    <dimen name="indent_0_50">2dp</dimen>
     <dimen name="indent_0_75">3dp</dimen>
     <dimen name="indent_1">4dp</dimen>
     <dimen name="indent_1_5">6dp</dimen>

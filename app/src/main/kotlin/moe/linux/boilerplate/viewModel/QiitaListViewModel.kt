@@ -4,6 +4,7 @@ import android.content.Context
 import android.databinding.BaseObservable
 import android.databinding.ObservableArrayList
 import android.databinding.ObservableList
+import android.view.View
 import android.view.ViewGroup
 import io.reactivex.disposables.CompositeDisposable
 import moe.linux.boilerplate.R
@@ -45,7 +46,7 @@ class QiitaStockViewModel(val navigator: Navigator, val stock: StockListResponse
     override fun destroy() {
     }
 
-    fun onClick() {
+    fun onClick(view: View) {
         Timber.d("click with: ${stock.title}")
         navigator.navigateToWebPage(stock.url)
     }

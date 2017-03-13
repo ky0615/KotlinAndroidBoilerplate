@@ -49,4 +49,9 @@ class QiitaListFragment : BaseFragment() {
             Snackbar.make(binding.coordinatorLayout, "cause error: ${it.message}", Snackbar.LENGTH_LONG).show()
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        qiitaListViewModel.destroy()
+    }
 }

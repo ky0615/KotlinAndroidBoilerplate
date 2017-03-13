@@ -15,18 +15,22 @@
         android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/indent_1_5"
+        android:layout_marginBottom="@dimen/indent_0_50"
         android:layout_marginLeft="@dimen/indent_3"
         android:layout_marginRight="@dimen/indent_3"
-        android:layout_marginTop="@dimen/indent_1_5"
-        app:cardElevation="@dimen/indent_1"
-        app:onClickListener="@{()->viewModel.onClick()}">
+        android:layout_marginTop="@dimen/indent_0_50"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="@dimen/indent_0_25"
+        app:cardElevation="@dimen/indent_0_25"
+        app:cardUseCompatPadding="true"
+        app:contentPadding="@dimen/indent_3"
+        app:onClickListener="@{viewModel.onClick}">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/indent_3">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/title"
