@@ -2,12 +2,12 @@ package moe.linux.boilerplate.view.activity
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.annotation.IdRes
 import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
-import android.view.MenuItem
 import io.reactivex.Observable
 import moe.linux.boilerplate.R
 import moe.linux.boilerplate.api.github.GithubApiClient
@@ -29,7 +29,7 @@ class MainActivity : BaseActivity() {
     @Inject
     lateinit var qiitaClient: QiitaApiClient
 
-    lateinit var onStateChange: Observable<MenuItem>
+    lateinit var onStateChange: Observable<Page>
 
     lateinit var frontFragment: FrontFragment
 
@@ -41,7 +41,8 @@ class MainActivity : BaseActivity() {
         initFragment(savedInstanceState)
 
         onStateChange.subscribe({
-            when (Page.parseWithId(it.itemId)) {
+            binding.toolbar.title = getString(it.title)
+            when (it) {
                 MainActivity.Page.FRONT -> frontFragment
                 MainActivity.Page.Github -> GithubListFragment.newInstance()
                 MainActivity.Page.Qiita -> QiitaListFragment.newInstance()
@@ -61,13 +62,14 @@ class MainActivity : BaseActivity() {
         binding.drawer.addDrawerListener(toggle)
         toggle.syncState()
 
-        onStateChange = Observable.create<MenuItem> { subscribe ->
-            binding.navView.setNavigationItemSelectedListener {
-                subscribe.onNext(it)
-                binding.drawer.closeDrawer(GravityCompat.START)
-                true
-            }
-        }
+        onStateChange = Observable.merge<Page>(listOf(
+            Observable.create<Page> { subscribe ->
+                binding.navView.setNavigationItemSelectedListener {
+                    subscribe.onNext(Page.parseWithId(it.itemId))
+                    binding.drawer.closeDrawer(GravityCompat.START)
+                    true
+                }
+            }))
             .publish()
             .refCount()
     }
@@ -80,6 +82,8 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
+        // TODO fragment backstackも考慮するように変更
+        Timber.d("backstack count: ${supportFragmentManager.backStackEntryCount}")
         if (binding.drawer.isDrawerOpen(GravityCompat.START))
             binding.drawer.closeDrawer(GravityCompat.START)
         else if (switchFragment(frontFragment, FrontFragment.TAG))
@@ -110,10 +114,10 @@ class MainActivity : BaseActivity() {
         return true
     }
 
-    enum class Page(@StringRes val id: Int) {
-        FRONT(0), // other page
-        Github(R.id.navGithub),
-        Qiita(R.id.navQiita),
+    enum class Page(@IdRes val id: Int, @StringRes val title: Int) {
+        FRONT(0, R.string.menu_top), // other page
+        Github(R.id.navGithub, R.string.menu_github),
+        Qiita(R.id.navQiita, R.string.menu_qiita),
         ;
 
         companion object {
