@@ -31,7 +31,11 @@ class MainActivity : BaseActivity() {
 
     lateinit var onStateChange: Observable<Page>
 
-    lateinit var frontFragment: FrontFragment
+    val frontFragment: FrontFragment by lazyFragment(FrontFragment.TAG, { FrontFragment.newInstance() })
+
+    val qiitaListFragment: QiitaListFragment by lazyFragment(QiitaListFragment.TAG, { QiitaListFragment.newInstance() })
+
+    val githubListFragment: GithubListFragment by lazyFragment(GithubListFragment.TAG, { GithubListFragment.newInstance() })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +48,8 @@ class MainActivity : BaseActivity() {
             binding.toolbar.title = getString(it.title)
             when (it) {
                 MainActivity.Page.FRONT -> frontFragment
-                MainActivity.Page.Github -> GithubListFragment.newInstance()
-                MainActivity.Page.Qiita -> QiitaListFragment.newInstance()
+                MainActivity.Page.Github -> githubListFragment
+                MainActivity.Page.Qiita -> qiitaListFragment
             }.apply {
                 switchFragment(this, this.TAG)
             }
@@ -75,8 +79,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initFragment(savedInstanceState: Bundle?) {
-        frontFragment = supportFragmentManager.findFragmentByTag(FrontFragment.TAG) as FrontFragment? ?: FrontFragment.newInstance()
-
         if (savedInstanceState == null)
             switchFragment(frontFragment, FrontFragment.TAG)
     }
@@ -126,4 +128,7 @@ class MainActivity : BaseActivity() {
             }
         }
     }
+
+    private fun <T : Fragment> lazyFragment(tag: String, non: () -> T): Lazy<T> =
+        lazy { supportFragmentManager.findFragmentByTag(tag) as? T ?: non() }
 }

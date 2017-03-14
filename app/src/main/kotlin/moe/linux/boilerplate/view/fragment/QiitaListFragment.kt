@@ -13,9 +13,10 @@ import moe.linux.boilerplate.viewModel.QiitaListViewModel
 import javax.inject.Inject
 
 class QiitaListFragment : BaseFragment() {
-    override val TAG: String = QiitaListFragment::class.simpleName ?: "UndefinedClass"
+    override val TAG = QiitaListFragment.TAG
 
     companion object {
+        val TAG = QiitaListFragment::class.simpleName ?: "UndefinedClass"
         fun newInstance(): QiitaListFragment {
             return QiitaListFragment()
         }

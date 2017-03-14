@@ -9,9 +9,10 @@ import moe.linux.boilerplate.databinding.GithubListFragmentBinding
 import javax.inject.Inject
 
 class GithubListFragment : BaseFragment() {
-    override val TAG: String = GithubListFragment::class.simpleName ?: "UndefinedClass"
+    override val TAG: String = GithubListFragment.TAG
 
     companion object {
+        val TAG = GithubListFragment::class.simpleName ?: "UndefinedClass"
         fun newInstance(): GithubListFragment {
             return GithubListFragment()
         }
