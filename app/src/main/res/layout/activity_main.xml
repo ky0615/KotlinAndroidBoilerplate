@@ -48,10 +48,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
+                    android:background="@color/nav_background"
                     android:elevation="@dimen/indent_1"
                     app:elevation="@dimen/indent_1"
-                    app:itemIconTint="@color/colorPrimary"
-                    app:itemTextColor="@color/colorAccent"
+                    app:itemIconTint="@color/bottom_navigation_item"
+                    app:itemTextColor="@color/bottom_navigation_item"
                     app:menu="@menu/activity_main_bottom_drawer"
                     tools:targetApi="lollipop" />
 
