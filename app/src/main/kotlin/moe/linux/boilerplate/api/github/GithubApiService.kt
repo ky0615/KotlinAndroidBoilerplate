@@ -1,6 +1,6 @@
 package moe.linux.boilerplate.api.github
 
-import io.reactivex.Single
+import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -10,5 +10,5 @@ interface GithubApiService {
     fun showCommitsList(
         @Path("author") author: String,
         @Path("repo") repo: String
-    ): Single<List<CommitsResponse>>
+    ): Observable<List<CommitsResponse>>
 }

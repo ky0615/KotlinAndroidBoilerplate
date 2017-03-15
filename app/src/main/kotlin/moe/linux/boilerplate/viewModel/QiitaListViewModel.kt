@@ -11,10 +11,7 @@ import moe.linux.boilerplate.R
 import moe.linux.boilerplate.api.qiita.QiitaApiClient
 import moe.linux.boilerplate.api.qiita.StockListResponse
 import moe.linux.boilerplate.databinding.ViewQiitaListContentBinding
-import moe.linux.boilerplate.util.view.DataBindingViewHolder
-import moe.linux.boilerplate.util.view.Navigator
-import moe.linux.boilerplate.util.view.ObservableListRecyclerAdapter
-import moe.linux.boilerplate.util.view.ViewModel
+import moe.linux.boilerplate.util.view.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -25,11 +22,20 @@ class QiitaListViewModel @Inject constructor(
 
     val list = ObservableArrayList<QiitaStockViewModel>()
 
-    fun start(error: (Throwable) -> Unit = {}) {
-        compositeDisposable.add(qiitaApiClient.stockList("dll7")
-            .subscribe(
-                { list.addAll(it.map { it.convertToQiitaStockViewModel() }).apply { it.forEach { Timber.d("add: ${it.title}") } } },
-                error))
+    fun start(start: () -> Unit = {}, finish: (Unit) -> Unit = {}, error: (Throwable) -> Unit = {}) {
+        compositeDisposable.add(
+            usingProgress(start, finish)
+                .flatMap { qiitaApiClient.stockList("dll7") }
+                .subscribe(
+                    {
+                        list.addAll(
+                            it.filter { (id) -> list.find { it.stock.id == id } == null }
+                                .map { it.convertToQiitaStockViewModel() }
+                                .apply { it.forEach { Timber.d("add: ${it.title}") } }
+                        )
+                    },
+                    error)
+        )
     }
 
     override fun destroy() {

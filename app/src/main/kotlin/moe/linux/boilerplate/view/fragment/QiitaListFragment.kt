@@ -11,6 +11,7 @@ import moe.linux.boilerplate.databinding.FragmentQiitaListBinding
 import moe.linux.boilerplate.view.activity.MainActivity
 import moe.linux.boilerplate.viewModel.QiitaListAdapter
 import moe.linux.boilerplate.viewModel.QiitaListViewModel
+import timber.log.Timber
 import javax.inject.Inject
 
 class QiitaListFragment : BaseFragment() {
@@ -48,10 +49,21 @@ class QiitaListFragment : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
-        qiitaListViewModel.start {
-            it.printStackTrace()
-            Snackbar.make(binding.coordinatorLayout, "cause error: ${it.message}", Snackbar.LENGTH_LONG).show()
-        }
+        qiitaListViewModel.start(
+            {
+                Timber.d("start")
+                Timber.d("start")
+                binding.progressBar.visibility = View.VISIBLE
+            },
+            {
+                Timber.d("finish")
+                binding.progressBar.visibility = View.GONE
+            },
+            {
+                it.printStackTrace()
+                Snackbar.make(binding.coordinatorLayout, "cause error: ${it.message}", Snackbar.LENGTH_LONG).show()
+            }
+        )
     }
 
     override fun onDestroy() {
