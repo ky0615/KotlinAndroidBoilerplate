@@ -13,6 +13,7 @@ import moe.linux.boilerplate.R
 import moe.linux.boilerplate.api.github.GithubApiClient
 import moe.linux.boilerplate.api.qiita.QiitaApiClient
 import moe.linux.boilerplate.databinding.ActivityMainBinding
+import moe.linux.boilerplate.view.fragment.BaseFragment
 import moe.linux.boilerplate.view.fragment.FrontFragment
 import moe.linux.boilerplate.view.fragment.GithubListFragment
 import moe.linux.boilerplate.view.fragment.QiitaListFragment
@@ -45,7 +46,6 @@ class MainActivity : BaseActivity() {
         initFragment(savedInstanceState)
 
         onStateChange.subscribe({
-            binding.toolbar.title = getString(it.title)
             when (it) {
                 MainActivity.Page.FRONT -> frontFragment
                 MainActivity.Page.Github -> githubListFragment
@@ -73,6 +73,12 @@ class MainActivity : BaseActivity() {
                     binding.drawer.closeDrawer(GravityCompat.START)
                     true
                 }
+            },
+            Observable.create<Page> { subscribe ->
+                binding.bottomMenu.setOnNavigationItemSelectedListener {
+                    subscribe.onNext(Page.parseWithId(it.itemId))
+                    true
+                }
             }))
             .publish()
             .refCount()
@@ -92,6 +98,8 @@ class MainActivity : BaseActivity() {
             Timber.d("back to front page")
         else
             super.onBackPressed()
+
+        updateView()
     }
 
     fun switchFragment(fragment: Fragment, tag: String): Boolean {
@@ -113,11 +121,32 @@ class MainActivity : BaseActivity() {
 
         manager.executePendingTransactions()
 
+        updateView()
+
         return true
     }
 
+    private fun updateView() {
+        val currentFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.contentFrame)
+        if (currentFragment is BaseFragment) {
+            currentFragment.getPage().also {
+                binding.toolbar.title = getString(it.title)
+                binding.navView.menu?.findItem(it.id)
+                    .apply {
+                        if (this == null)
+                            binding.navView.menu?.setGroupCheckable(R.id.mainMenu, false, false)
+                    }?.isChecked = true
+                binding.bottomMenu.menu.findItem(it.id)
+                    .apply {
+                        if (this == null)
+                            binding.bottomMenu.menu.setGroupCheckable(R.id.mainMenu, false, false)
+                    }?.isChecked = true
+            }
+        }
+    }
+
     enum class Page(@IdRes val id: Int, @StringRes val title: Int) {
-        FRONT(0, R.string.menu_top), // other page
+        FRONT(R.id.navHome, R.string.app_name), // other page
         Github(R.id.navGithub, R.string.menu_github),
         Qiita(R.id.navQiita, R.string.menu_qiita),
         ;

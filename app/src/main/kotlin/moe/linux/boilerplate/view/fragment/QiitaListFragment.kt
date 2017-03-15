@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import moe.linux.boilerplate.api.qiita.QiitaApiClient
 import moe.linux.boilerplate.databinding.FragmentQiitaListBinding
+import moe.linux.boilerplate.view.activity.MainActivity
 import moe.linux.boilerplate.viewModel.QiitaListAdapter
 import moe.linux.boilerplate.viewModel.QiitaListViewModel
 import javax.inject.Inject
@@ -29,6 +30,8 @@ class QiitaListFragment : BaseFragment() {
     lateinit var qiitaListViewModel: QiitaListViewModel
 
     lateinit private var binding: FragmentQiitaListBinding
+
+    override fun getPage(): MainActivity.Page = MainActivity.Page.Qiita
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

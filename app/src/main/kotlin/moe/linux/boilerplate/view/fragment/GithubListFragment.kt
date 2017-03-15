@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import moe.linux.boilerplate.api.github.GithubApiClient
 import moe.linux.boilerplate.databinding.GithubListFragmentBinding
+import moe.linux.boilerplate.view.activity.MainActivity
 import javax.inject.Inject
 
 class GithubListFragment : BaseFragment() {
@@ -22,6 +23,8 @@ class GithubListFragment : BaseFragment() {
     lateinit var client: GithubApiClient
 
     lateinit private var binding: GithubListFragmentBinding
+
+    override fun getPage(): MainActivity.Page = MainActivity.Page.Github
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

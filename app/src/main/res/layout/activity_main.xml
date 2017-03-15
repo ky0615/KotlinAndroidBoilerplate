@@ -15,26 +15,47 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.design.widget.AppBarLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
+                <android.support.design.widget.AppBarLayout
+                    android:id="@+id/appBar"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@color/colorPrimary"
-                    app:popupTheme="@style/AppTheme.PopupOverlay"
-                    app:theme="@style/AppTheme.AppBarOverlay">
+                    android:layout_height="wrap_content">
 
-                </android.support.v7.widget.Toolbar>
-            </android.support.design.widget.AppBarLayout>
+                    <android.support.v7.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:background="@color/colorPrimary"
+                        app:popupTheme="@style/AppTheme.PopupOverlay"
+                        app:theme="@style/AppTheme.AppBarOverlay">
 
-            <FrameLayout
-                android:id="@+id/contentFrame"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                    </android.support.v7.widget.Toolbar>
+                </android.support.design.widget.AppBarLayout>
+
+                <FrameLayout
+                    android:id="@+id/contentFrame"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_above="@+id/bottomMenu"
+                    android:layout_below="@+id/appBar"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                <android.support.design.widget.BottomNavigationView
+                    android:id="@+id/bottomMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:elevation="@dimen/indent_1"
+                    app:elevation="@dimen/indent_1"
+                    app:itemIconTint="@color/colorPrimary"
+                    app:itemTextColor="@color/colorAccent"
+                    app:menu="@menu/activity_main_bottom_drawer"
+                    tools:targetApi="lollipop" />
+
+            </RelativeLayout>
         </android.support.design.widget.CoordinatorLayout>
 
         <android.support.design.widget.NavigationView
