@@ -230,3 +230,4 @@ app/fabric.properties
 debug.keystore
 signing.keystore
 #gradle/wrapper/gradle-wrapper.jar
+app/google-services.json

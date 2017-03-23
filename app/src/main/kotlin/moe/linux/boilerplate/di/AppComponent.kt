@@ -7,7 +7,8 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = arrayOf(
     AppModule::class,
-    ApiModule::class
+    ApiModule::class,
+    FirebaseModule::class
 ))
 interface AppComponent {
     fun injectTo(app: MainApplication)

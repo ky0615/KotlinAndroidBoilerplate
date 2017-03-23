@@ -113,6 +113,10 @@ dependencies {
     // DataBinding
     kapt 'com.android.databinding:compiler:2.3.0'
 
+    // Firebase
+    compile 'com.google.firebase:firebase-core:10.2.0'
+    compile 'com.google.firebase:firebase-database:10.2.0'
+
     // Dagger
     compile 'com.google.dagger:dagger:2.8'
     kapt 'com.google.dagger:dagger-compiler:2.8'
@@ -194,3 +198,5 @@ if (fabricFile.canRead()) {
 }
 buildscript {
 }
+
+apply plugin: 'com.google.gms.google-services'
