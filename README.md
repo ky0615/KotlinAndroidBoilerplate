@@ -53,3 +53,6 @@ index 4ff94ff..42ed0d6 100644
      }
  }
 ```
+
+## License
+MIT
